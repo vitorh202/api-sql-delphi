@@ -1,0 +1,18 @@
+{
+  "name": "delphisql-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api/tarefas.js",
+  "scripts": {
+    "dev": "node api/tarefas.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "raw-body": "^3.0.0"
+  }
+}

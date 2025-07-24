@@ -1,0 +1,34 @@
+const express = require('express');
+const { Pool } = require('pg');
+const app = express();
+app.use(express.json());
+require('dotenv').config();
+
+// conexão com CockroachDB
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+// rota básica de teste
+app.get('/', (req, res) => {
+  res.send('API funcionando!');
+});
+
+// rota para listar tarefas
+app.get('/tarefas', async (req, res) => {
+  const result = await pool.query('SELECT * FROM tarefas ORDER BY criada_em DESC');
+  res.json(result.rows);
+});
+
+// rota para criar tarefa
+app.post('/tarefas', async (req, res) => {
+  const { titulo, descricao, data_limite, prioridade } = req.body;
+  await pool.query(
+    'INSERT INTO tarefas (titulo, descricao, data_limite, prioridade) VALUES ($1, $2, $3, $4)',
+    [titulo, descricao, data_limite, prioridade]
+  );
+  res.status(201).send('Tarefa criada com sucesso');
+});
+
+module.exports = app;
