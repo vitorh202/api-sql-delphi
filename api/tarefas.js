@@ -43,6 +43,23 @@ module.exports = async (req, res) => {
     return res.status(200).json({ mensagem: 'Tarefa deletada com sucesso!' });
   }
 
+  if (acao === 'editar') {
+  const { id, titulo, descricao, data_limite, prioridade } = body;
+
+  if (!id || !titulo || !descricao || !data_limite || !prioridade) {
+    return res.status(400).json({ erro: 'Todos os campos são obrigatórios para editar.' });
+  }
+
+  await pool.query(
+    `UPDATE tarefas 
+     SET titulo = $1, descricao = $2, data_limite = $3, prioridade = $4 
+     WHERE id = $5`,
+    [titulo, descricao, data_limite, prioridade, id]
+  );
+
+  return res.status(200).json({ mensagem: 'Tarefa editada com sucesso!' });
+  }
+
   if (acao === 'atualizar') {
     const { id, concluida } = body;
 
